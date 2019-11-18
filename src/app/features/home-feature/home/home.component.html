@@ -1,0 +1,51 @@
+<mat-card *ngIf="dataSource$ | async as source">
+  <mat-card-header>
+    <mat-card-title>Focos de emisiones</mat-card-title>
+    <mat-card-subtitle>Administrador de focos de emisiones</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table [dataSource]="source" class="">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <!-- <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox> -->
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <!--  -->
+          <mat-checkbox
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="getSelection(row)"
+            [aria-label]="checkboxLabel(row)"
+            (click)="$event.stopPropagation()"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Descripción</th>
+        <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="selection.toggle(row)"
+      ></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
+
+<app-speed-dial
+  *ngIf="isAllSelected()"
+  [configuration]="speedDialConf"
+  (action)="onSelectedAction($event)"
+>
+</app-speed-dial>
